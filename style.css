@@ -169,15 +169,22 @@ button:hover{
         opacity:0;
     }
 }
-
+@media (min-width: 1024px){
+    .floating-cat{
+        font-size:75px;
+        opacity:0.06;
+        transform: scale(1.1);
+    }
+}
 /* mobile tối ưu */
-@media(max-width:600px){
+@media(max-width:768px){
     .floating-cats span{
-        font-size:18px;
+        font-size:22px;
         animation-duration:28s;
         opacity:0.06;
     }
 }
+
 #ketQua{
     font-size:44px;
     font-weight:900;
@@ -190,6 +197,7 @@ button:hover{
         0 0 5px rgba(179,0,0,0.4),
         0 0 10px rgba(179,0,0,0.2);
 }
+
 
 
 
