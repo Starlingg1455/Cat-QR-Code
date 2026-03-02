@@ -173,15 +173,7 @@ button.gray:hover{
     }
 }
 
-@keyframes floatUp{
-    0%{
-        transform: translateY(0);
-    }
-    100%{
-        transform: translateY(-200vh);
-    }
 
-}
 
 #reader{
     width:100%;
@@ -201,6 +193,18 @@ button.gray:hover{
     font-weight:900;
     color:#8B0000; /* đỏ đậm gần đen */
     margin-top:10px;
+}
+
+.floating-cats{
+    position: fixed !important;
+    z-index: 0 !important;
+    pointer-events: none;
+    will-change: transform;
+}
+
+.card{
+    position: relative;
+    z-index: 2;
 }
 
 
