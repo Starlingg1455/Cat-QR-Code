@@ -87,14 +87,8 @@ button:hover{
     text-align:center;
 }
 
-.hidden{
-    display:none;
-}
-
 /* mèo trôi từng con */
-/* ===== PREMIUM FLOATING CATS ===== */
 
-/* ===== PREMIUM FLOATING CATS ===== */
 .floating-cats{
     position:fixed;
     top:0;
@@ -109,10 +103,10 @@ button:hover{
 .floating-cats span{
     position:absolute;
     bottom:-60px;
-    font-size:26px;
-    filter:grayscale(1) brightness(0);
+    font-size:30px;
+    filter:grayscale(1) brightness(0.25);
     opacity:0;
-    animation:floatPremium 22s ease-in-out infinite;
+    animation:floatPremium 19s ease-in-out infinite;
 }
 
 /* vị trí ngang + delay khác nhau */
@@ -194,6 +188,7 @@ button:hover{
     letter-spacing:1.5px;
 
 }
+
 
 
 
