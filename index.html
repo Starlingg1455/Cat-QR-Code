@@ -88,7 +88,7 @@
 <script>
 
 let qrcode;
-let scanner;
+let scanner = new Html5Qrcode("reader");
 
 function taoQR(){
     let input = document.getElementById("noiDung").value.trim();
@@ -136,8 +136,6 @@ function batCamera(){
         alert("Không thể dùng camera khi mở file trực tiếp. Hãy dùng HTTPS.");
         return;
     }
-
-    scanner = new Html5Qrcode("reader");
 
     Html5Qrcode.getCameras()
     .then(devices => {
@@ -200,19 +198,16 @@ function scanAnh(){
         return;
     }
 
-    const reader = new Html5Qrcode("reader");
-
-    reader.scanFile(file, true)
+    scanner.scanFile(file, true)
         .then(qrMessage => {
             document.getElementById("ketQua").innerHTML =
                 "Kết quả: " + qrMessage;
         })
-        .catch(err => {
+        .catch(() => {
             document.getElementById("ketQua").innerHTML =
                 "Không nhận diện được mã QR.";
         });
 }
-
 document.getElementById("noiDung").addEventListener("input", function(){
 
     document.getElementById("traiTim").classList.add("hidden");
@@ -239,5 +234,6 @@ document.getElementById("noiDung").addEventListener("input", function(){
 </body>
 
 </html>
+
 
 
