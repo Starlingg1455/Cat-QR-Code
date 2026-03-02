@@ -133,7 +133,7 @@ function taiQR(){
 function batCamera(){
 
     if(location.protocol === "file:"){
-        alert("Không thể dùng camera khi mở file trực tiếp. Hãy dùng Live Server hoặc HTTPS.");
+        alert("Không thể dùng camera khi mở file trực tiếp. Hãy dùng HTTPS.");
         return;
     }
 
@@ -147,12 +147,35 @@ function batCamera(){
             return;
         }
 
+        let cameraId = devices[0].id;
+
+        // Ưu tiên camera sau
+        for(let device of devices){
+            let label = device.label.toLowerCase();
+            if(label.includes("back") || 
+               label.includes("rear") || 
+               label.includes("environment")){
+                cameraId = device.id;
+                break;
+            }
+        }
+
         scanner.start(
-            devices[0].id,
-            { fps: 10, qrbox: 250 },
+            cameraId,
+            {
+                fps: 10,
+                qrbox: 250,
+                aspectRatio: 1.0,
+                videoConstraints: {
+                    facingMode: { exact: "environment" }
+                }
+            },
             qrMessage => {
                 document.getElementById("ketQua").innerHTML =
                     "Kết quả: " + qrMessage;
+
+                // Tự động dừng sau khi quét xong
+                scanner.stop();
             }
         );
 
@@ -214,4 +237,5 @@ document.getElementById("noiDung").addEventListener("input", function(){
 });</script>
 
 </body>
+
 </html>
