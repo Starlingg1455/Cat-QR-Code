@@ -194,26 +194,6 @@ button.gray:hover{
     color:#8B0000; /* đỏ đậm gần đen */
     margin-top:10px;
 }
-.floating-cats{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0;
-}
-
-.floating-cats.active{
-    opacity: 1;
-}
-
-.card{
-    position: relative;
-    z-index: 2;
-}
-
 .floating-cats span{
     position: absolute;
     font-size: 24px;
@@ -231,3 +211,4 @@ button.gray:hover{
         opacity:0;
     }
 }
+
