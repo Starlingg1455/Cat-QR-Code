@@ -1,40 +1,166 @@
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family: 'Segoe UI', sans-serif;
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
 }
 
 body{
-    background:#f5f7fb;
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    position:relative;
+background:#f5f7fb;
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+position:relative;
+padding:20px;
 }
+
 .card{
-    background:white;
-    width:450px;
-    padding:30px;
-    border-radius:15px;
-    box-shadow:0 15px 40px rgba(0,0,0,0.08);
-    text-align:center;
-    position:relative;
-    z-index:2;
+background:white;
+width:450px;
+max-width:100%;
+padding:30px;
+border-radius:15px;
+box-shadow:0 15px 40px rgba(0,0,0,0.08);
+text-align:center;
+position:relative;
+z-index:2;
 }
 
 h1{
-    margin-bottom:20px;
+margin-bottom:20px;
 }
 
 .black-cat{
-    filter: grayscale(1) brightness(0);
+filter:grayscale(1) brightness(0);
 }
 
 .section{
-    margin-bottom:25px;
+margin-bottom:25px;
 }
+
+input{
+width:100%;
+padding:10px;
+border-radius:8px;
+border:1px solid #ddd;
+margin-bottom:10px;
+}
+
+button{
+padding:10px 15px;
+border:none;
+border-radius:8px;
+background:#4e73df;
+color:white;
+cursor:pointer;
+transition:0.2s;
+margin:4px;
+}
+
+button:hover{
+opacity:0.8;
+}
+
+.gray{
+background:#858796;
+}
+
+.qr-box{
+margin-top:15px;
+display:flex;
+justify-content:center;
+}
+
+.hidden{
+display:none;
+}
+
+#reader{
+width:100%;
+margin-top:15px;
+}
+
+#previewAnh{
+margin-top:10px;
+text-align:center;
+}
+
+#thongBao,#ketQua,#thongBaoDoc{
+margin-top:8px;
+font-size:14px;
+}
+
+#traiTim{
+margin-top:15px;
+font-size:20px;
+text-align:center;
+}
+
+.floating-cats{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+pointer-events:none;
+z-index:1;
+overflow:hidden;
+}
+
+.floating-cats span{
+position:absolute;
+bottom:-60px;
+font-size:30px;
+filter:grayscale(1) brightness(0.25);
+opacity:0;
+animation:floatPremium 19s ease-in-out infinite;
+}
+
+.floating-cats span:nth-child(1){left:4%;animation-delay:-2s;}
+.floating-cats span:nth-child(2){left:8%;animation-delay:-4.5s;}
+.floating-cats span:nth-child(3){left:12%;animation-delay:-1.2s;}
+.floating-cats span:nth-child(4){left:16%;animation-delay:-6.7s;}
+.floating-cats span:nth-child(5){left:20%;animation-delay:-3.1s;}
+.floating-cats span:nth-child(6){left:24%;animation-delay:-9.5s;}
+.floating-cats span:nth-child(7){left:28%;animation-delay:-5.8s;}
+.floating-cats span:nth-child(8){left:32%;animation-delay:-11.2s;}
+.floating-cats span:nth-child(9){left:36%;animation-delay:-2.8s;}
+.floating-cats span:nth-child(10){left:40%;animation-delay:-7.6s;}
+
+@keyframes floatPremium{
+0%{transform:translateY(0) translateX(0) scale(.85);opacity:0;}
+15%{opacity:.06;}
+40%{transform:translateY(-30vh) translateX(12px) scale(1);}
+70%{transform:translateY(-60vh) translateX(-10px) scale(1.05);}
+100%{transform:translateY(-110vh) translateX(8px) scale(.9);opacity:0;}
+}
+
+@media(min-width:1024px){
+.floating-cats span{
+font-size:42px;
+}
+}
+
+@media(max-width:768px){
+.card{
+padding:20px;
+}
+.floating-cats span{
+font-size:22px;
+animation-duration:28s;
+opacity:.06;
+}
+}
+
+#ketQua{
+font-size:30px;
+font-weight:900;
+color:#b30000;
+margin-top:15px;
+text-align:center;
+letter-spacing:1.5px;
+}}
 
 input{
     width:100%;
@@ -186,6 +312,7 @@ button:hover{
     letter-spacing:1.5px;
 
 }
+
 
 
 
