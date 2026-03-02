@@ -156,6 +156,18 @@ button:hover{
         opacity:0.06;
     }
 }
+#ketQua{
+    font-size:44px;
+    font-weight:900;
+    color:#b30000;
+    margin-top:15px;
+    text-align:center;
+    letter-spacing:1.5px;
+
+    text-shadow: 
+        0 0 5px rgba(179,0,0,0.4),
+        0 0 10px rgba(179,0,0,0.2);
+}
 
 
 
