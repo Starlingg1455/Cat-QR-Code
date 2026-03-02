@@ -108,11 +108,11 @@ button:hover{
 /* mèo đen trơn sang */
 .floating-cats span{
     position:absolute;
-    bottom:-50px;
-    font-size:26px;
+    bottom:-30px;
+    font-size:30px;
     filter:grayscale(1) brightness(0);
     opacity:0;
-    animation: floatPremium 22s ease-in-out infinite;
+    animation: floatPremium 20s ease-in-out infinite;
 }
 
 /* lệch vị trí + lệch thời gian */
@@ -156,6 +156,7 @@ button:hover{
         opacity:0.06;
     }
 }
+
 
 
 
