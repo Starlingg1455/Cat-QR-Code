@@ -92,20 +92,22 @@ let thongBao = document.getElementById("thongBao");
 let qrDiv = document.getElementById("qrcode");
 
 if(input === ""){
+    qrDiv.innerHTML = "";
     thongBao.innerHTML = "Vui lòng nhập nội dung.";
     thongBao.style.color = "red";
     return;
 }
 
-/* xoá QR cũ thật sự */
-while(qrDiv.firstChild){
-    qrDiv.removeChild(qrDiv.firstChild);
-}
+/* xoá QR cũ */
+qrDiv.innerHTML = "";
 
-QRCode.toCanvas(input,{width:200},function(err,canvas){
-    if(err) return;
+/* tạo canvas mới */
+let canvas = document.createElement("canvas");
+qrDiv.appendChild(canvas);
 
-    qrDiv.appendChild(canvas);
+/* vẽ QR vào canvas đó */
+QRCode.toCanvas(canvas, input, { width: 200 }, function (err) {
+    if (err) return;
 
     document.getElementById("btnTai").classList.remove("hidden");
     document.getElementById("traiTim").classList.remove("hidden");
@@ -114,9 +116,6 @@ QRCode.toCanvas(input,{width:200},function(err,canvas){
 thongBao.innerHTML = "Tạo mã QR thành công.";
 thongBao.style.color = "green";
 }
-
-/* ================= TẢI QR ================= */
-
 function taiQR(){
 let canvas=document.querySelector("#qrcode canvas");
 if(!canvas){
@@ -242,4 +241,5 @@ document.getElementById("previewAnh").innerHTML="";
 </script>
 </body>
 </html>
+
 
