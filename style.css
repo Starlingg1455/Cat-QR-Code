@@ -107,8 +107,9 @@ button:hover{
 .floating-cats span{
     position:absolute;
     font-size:38px;
-    filter:grayscale(1) brightness(0.5);
-    opacity:0.17;
+
+    filter: grayscale(1) brightness(1.8);
+    opacity:0.15;
 
     animation:floatRandom linear infinite;
 
@@ -163,6 +164,7 @@ button:hover{
         opacity:0.18;
     }
 }
+
 
 
 
