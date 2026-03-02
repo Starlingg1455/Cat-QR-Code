@@ -7,25 +7,28 @@
 
 <link rel="stylesheet" href="style.css">
 
-<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js" defer></script>
 <script src="https://unpkg.com/html5-qrcode" defer></script>
 </head>
+
 <body>
 
 <div class="card">
 
-    <h1><span class="black-cat">🐱</span> Cat QR Code<span class="black-cat">🐱</span></h1>
+    <h1>🐱 Cat QR Code 🐱</h1>
 
+    <!-- ================= TẠO QR ================= -->
     <div class="section">
         <h3>Sinh mã QR</h3>
+
         <input type="text" id="noiDung" placeholder="Nhập nội dung...">
         <button onclick="taoQR()">Tạo mã QR</button>
 
         <div class="qr-box">
             <div id="qrcode"></div>
-
         </div>
-	<button id="btnTai" class="gray hidden" onclick="taiQR()">Tải QR về</button>
+
+        <button id="btnTai" class="gray hidden" onclick="taiQR()">Tải QR về</button>
         <p id="thongBao"></p>
 
     <!-- Trái tim mèo -->
@@ -39,6 +42,7 @@
     </div>
     </div>
 
+ <!-- ================= QUÉT QR ================= -->
     <div class="section">
         <h3>Quét mã QR</h3>
 
@@ -50,188 +54,112 @@
         <input type="file" id="chonAnh" accept="image/*">
         <button class="gray" onclick="scanAnh()">Quét từ ảnh</button>
 
-        <p id="ketQua" style="color:#B22222; font-size:24px; font-weight:bold;background: #ffecec;padding: 8px;border-radius: 8px"></p>
+        <p id="ketQua"></p>
     </div>
 
 </div>
 
-<!-- Mèo trôi từng con -->
-<div class="floating-cats">
-
-    <!-- 40 icon -->
-    <span>🐱</span><span>🐾</span>
-    <span>🐱</span><span>🐾</span>
-    <span>🐱</span><span>🐾</span>
-    <span>🐱</span><span>🐾</span>
-    <span>🐱</span><span>🐾</span>
-
-    <span>🐱</span><span>🐾</span>
-    <span>🐱</span><span>🐾</span>
-    <span>🐱</span><span>🐾</span>
-    <span>🐱</span><span>🐾</span>
-    <span>🐱</span><span>🐾</span>
-
-    <span>🐱</span><span>🐾</span>
-    <span>🐱</span><span>🐾</span>
-    <span>🐱</span><span>🐾</span>
-    <span>🐱</span><span>🐾</span>
-    <span>🐱</span><span>🐾</span>
-
-    <span>🐱</span><span>🐾</span>
-    <span>🐱</span><span>🐾</span>
-    <span>🐱</span><span>🐾</span>
-    <span>🐱</span><span>🐾</span>
-    <span>🐱</span><span>🐾</span>
-</div>
-
 <script>
+let scanner;
+let isScanning = false;
 
-let qrcode;
-let scanner = new Html5Qrcode("reader");
+document.addEventListener("DOMContentLoaded", () => {
+    scanner = new Html5Qrcode("reader");
+});
 
+/* ================= TẠO QR ================= */
 function taoQR(){
-    let input = document.getElementById("noiDung").value.trim();
-    let thongBao = document.getElementById("thongBao");
-    let qrDiv = document.getElementById("qrcode");
+    const input = document.getElementById("noiDung").value.trim();
+    const qrDiv = document.getElementById("qrcode");
+    const thongBao = document.getElementById("thongBao");
 
-    if(input === ""){
-        thongBao.innerHTML = "Vui lòng nhập nội dung.";
+    if(!input){
+        thongBao.textContent = "Vui lòng nhập nội dung.";
         thongBao.style.color = "red";
         return;
     }
 
     qrDiv.innerHTML = "";
 
-    QRCode.toCanvas(input, { width: 200 }, function (err, canvas) {
-        if (err) {
-            console.error(err);
-            return;
-        }
+    QRCode.toCanvas(input, { width: 200 }, (err, canvas) => {
+        if(err) return console.error(err);
         qrDiv.appendChild(canvas);
-	document.getElementById("btnTai").classList.remove("hidden");
+        document.getElementById("btnTai").classList.remove("hidden");
     });
 
-    thongBao.innerHTML = "Tạo mã QR thành công.";
+    thongBao.textContent = "Tạo mã QR thành công.";
     thongBao.style.color = "green";
-
     document.getElementById("traiTim").classList.remove("hidden");
 }
+
 function taiQR(){
-    let canvas = document.querySelector("#qrcode canvas");
+    const canvas = document.querySelector("#qrcode canvas");
+    if(!canvas) return alert("Chưa có mã QR.");
 
-    if(!canvas){
-        alert("Chưa có mã QR.");
-        return;
-    }
-
-    let link = document.createElement("a");
+    const link = document.createElement("a");
     link.download = "cat-qr.png";
     link.href = canvas.toDataURL("image/png");
     link.click();
 }
-function batCamera(){
 
-    if(location.protocol === "file:"){
-        alert("Không thể dùng camera khi mở file trực tiếp. Hãy dùng HTTPS.");
-        return;
-    }
+/* ================= CAMERA ================= */
+function batCamera(){
+    if(isScanning) return;
 
     Html5Qrcode.getCameras()
     .then(devices => {
+        if(!devices.length) throw "Không tìm thấy camera.";
 
-        if(!devices || devices.length === 0){
-            alert("Không tìm thấy camera.");
-            return;
-        }
-
-        let cameraId = devices[0].id;
-
-        // Ưu tiên camera sau
-        for(let device of devices){
-            let label = device.label.toLowerCase();
-            if(label.includes("back") || 
-               label.includes("rear") || 
-               label.includes("environment")){
-                cameraId = device.id;
-                break;
-            }
-        }
-
-        scanner.start(
-            cameraId,
-            {
-                fps: 10,
-                qrbox: 250,
-                aspectRatio: 1.0,
-                videoConstraints: {
-                    facingMode: { exact: "environment" }
-                }
-            },
+        return scanner.start(
+            devices[0].id,
+            { fps: 10, qrbox: 250 },
             qrMessage => {
-                document.getElementById("ketQua").innerHTML =
+                document.getElementById("ketQua").textContent =
                     "Kết quả: " + qrMessage;
-
-                // Tự động dừng sau khi quét xong
-                scanner.stop();
             }
         );
-
     })
-    .catch(err => {
-        alert("Lỗi camera: " + err);
-    });
+    .then(() => isScanning = true)
+    .catch(err => alert("Lỗi camera: " + err));
 }
 
 function dungCamera(){
-    if(scanner && scanner.isScanning){
-    scanner.stop();
+    if(!isScanning) return;
+
+    scanner.stop()
+    .then(() => {
+        isScanning = false;
+        document.getElementById("reader").innerHTML = "";
+    })
+    .catch(() => {});
 }
 
+/* ================= QUÉT ẢNH ================= */
 function scanAnh(){
-    let fileInput = document.getElementById("chonAnh");
-    let file = fileInput.files[0];
-
-    if(!file){
-        alert("Vui lòng chọn ảnh.");
-        return;
-    }
+    const file = document.getElementById("chonAnh").files[0];
+    if(!file) return alert("Vui lòng chọn ảnh.");
 
     scanner.scanFile(file, true)
-        .then(qrMessage => {
-            document.getElementById("ketQua").innerHTML =
-                "Kết quả: " + qrMessage;
-        })
-        .catch(() => {
-            document.getElementById("ketQua").innerHTML =
-                "Không nhận diện được mã QR.";
-        });
+    .then(qrMessage => {
+        document.getElementById("ketQua").textContent =
+            "Kết quả: " + qrMessage;
+    })
+    .catch(() => {
+        document.getElementById("ketQua").textContent =
+            "Không nhận diện được mã QR.";
+    });
 }
-document.getElementById("noiDung").addEventListener("input", function(){
 
+/* ================= RESET ================= */
+document.getElementById("noiDung").addEventListener("input", () => {
     document.getElementById("traiTim").classList.add("hidden");
-
     document.getElementById("qrcode").innerHTML = "";
-
     document.getElementById("btnTai").classList.add("hidden");
-
-    document.getElementById("thongBao").innerHTML = "";
-
-    document.getElementById("ketQua").innerHTML = "";
-
+    document.getElementById("thongBao").textContent = "";
+    document.getElementById("ketQua").textContent = "";
     document.getElementById("chonAnh").value = "";
-
-    if(scanner){
-        scanner.stop().then(() => {
-            document.getElementById("reader").innerHTML = "";
-        }).catch(() => {});
-    }
-
-});</script>
+});
+</script>
 
 </body>
-
 </html>
-
-
-
-
