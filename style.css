@@ -164,6 +164,17 @@ button.gray:hover{
 .floating-cats span:nth-child(38){ left:92%; animation-delay:19.4s; }
 .floating-cats span:nth-child(39){ left:96%; animation-delay:10.8s; }
 .floating-cats span:nth-child(40){ left:99%; animation-delay:17.6s; }
+@keyframes floatUp{
+    0%{
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+    10%{opacity:1;}
+    100%{
+        transform: translateY(-10vh) rotate(360deg);
+        opacity:0;
+    }
+}
 
 @keyframes floatUp{
     0%{
@@ -194,21 +205,8 @@ button.gray:hover{
     color:#8B0000; /* đỏ đậm gần đen */
     margin-top:10px;
 }
-.floating-cats span{
-    position: absolute;
-    font-size: 24px;
-    animation: floatUp 5s linear infinite;
-}
 
-@keyframes floatUp{
-    0%{
-        transform: translateY(100vh) rotate(0deg);
-        opacity: 0;
-    }
-    10%{opacity:1;}
-    100%{
-        transform: translateY(-10vh) rotate(360deg);
-        opacity:0;
-    }
-}
+
+
+
 
