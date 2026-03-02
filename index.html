@@ -14,21 +14,20 @@
 
 <div class="card">
 
-    <h1><span class="black-cat">🐱</span> Cat QR Code<span class="black-cat">🐱</span></h1>
+    <h1><span class="black-cat">🐱</span>Cat QR Code<span class="black-cat">🐱</span></h1>
 
-    <div class="section">
-        <h3>Sinh mã QR</h3>
-        <input type="text" id="noiDung" placeholder="Nhập nội dung...">
-        <button onclick="taoQR()">Tạo mã QR</button>
+<div class="section">
+<h3>Sinh mã QR</h3>
+<input type="text" id="noiDung" placeholder="Nhập nội dung...">
+<button onclick="taoQR()">Tạo mã QR</button>
 
-        <div class="qr-box">
-            <div id="qrcode"></div>
+<div class="qr-box">
+<div id="qrcode"></div>
+</div>
 
-        </div>
-	<button id="btnTai" class="gray hidden" onclick="taiQR()">Tải QR về</button>
-        <p id="thongBao"></p>
+<button id="btnTai" class="gray hidden" onclick="taiQR()">Tải QR về</button>
+<p id="thongBao"></p>
 
-  <!-- Trái tim mèo -->
     <!-- Trái tim mèo -->
     <div id="traiTim" class="hidden">
   😽 😽 &nbsp;&nbsp;&nbsp;&nbsp;😽 😽<br>
@@ -40,21 +39,23 @@
     </div>
     </div>
 
-    <div class="section">
-        <h3>Quét mã QR</h3>
+<div class="section">
+<h3>Quét mã QR</h3>
 
-        <button onclick="batCamera()">Bật camera</button>
-        <button class="gray" onclick="dungCamera()">Dừng camera</button>
+<button onclick="batCamera()">Bật camera</button>
+<button class="gray" onclick="dungCamera()">Dừng camera</button>
 
-        <div id="reader"></div>
+<div id="reader"></div>
 
-        <input type="file" id="chonAnh" accept="image/*">
-        <button class="gray" onclick="scanAnh()">Quét từ ảnh</button>
+<input type="file" id="chonAnh" accept="image/*" onchange="hienAnh()">
+<div id="previewAnh" style="margin-top:10px; text-align:center;"></div>
+<button class="gray" onclick="scanAnh()">Quét từ ảnh</button>
 
-        <p id="ketQua"></p>
-    </div>
+<p id="ketQua"></p>
+</div>
 
 </div>
+
 
 <!-- Mèo trôi từng con -->
 <div class="floating-cats">
@@ -87,111 +88,122 @@
 
 <script>
 
-let qrcode;
-let scanner;
+let scanner = null;
+/* ================= TẠO QR ================= */
 
 function taoQR(){
-    let input = document.getElementById("noiDung").value.trim();
-    let thongBao = document.getElementById("thongBao");
-    let qrDiv = document.getElementById("qrcode");
+let input = document.getElementById("noiDung").value.trim();
+let thongBao = document.getElementById("thongBao");
+let qrDiv = document.getElementById("qrcode");
 
-    if(input === ""){
-        thongBao.innerHTML = "Vui lòng nhập nội dung.";
-        thongBao.style.color = "red";
-        return;
-    }
-
-    qrDiv.innerHTML = "";
-
-    QRCode.toCanvas(input, { width: 200 }, function (err, canvas) {
-        if (err) {
-            console.error(err);
-            return;
-        }
-        qrDiv.appendChild(canvas);
-	document.getElementById("btnTai").classList.remove("hidden");
-    });
-
-    thongBao.innerHTML = "Tạo mã QR thành công.";
-    thongBao.style.color = "green";
-
-    document.getElementById("traiTim").classList.remove("hidden");
+if(input === ""){
+    thongBao.innerHTML = "Vui lòng nhập nội dung.";
+    thongBao.style.color = "red";
+    return;
 }
+
+qrDiv.innerHTML = "";
+
+QRCode.toCanvas(input, { width: 200 }, function (err, canvas) {
+    if (err) return;
+    qrDiv.appendChild(canvas);
+    document.getElementById("btnTai").classList.remove("hidden");
+});
+
+thongBao.innerHTML = "Tạo mã QR thành công.";
+thongBao.style.color = "green";
+}
+
+/* ================= TẢI QR ================= */
+
 function taiQR(){
-    let canvas = document.querySelector("#qrcode canvas");
-
-    if(!canvas){
-        alert("Chưa có mã QR.");
-        return;
-    }
-
-    let link = document.createElement("a");
-    link.download = "cat-qr.png";
-    link.href = canvas.toDataURL("image/png");
-    link.click();
+let canvas = document.querySelector("#qrcode canvas");
+if(!canvas){
+    alert("Chưa có mã QR.");
+    return;
 }
+let link = document.createElement("a");
+link.download = "cat-qr.png";
+link.href = canvas.toDataURL("image/png");
+link.click();
+}
+
+/* ================= BẬT CAMERA ================= */
+
 function batCamera(){
 
-    if(location.protocol === "file:"){
-        alert("Không thể dùng camera khi mở file trực tiếp. Hãy dùng HTTPS.");
+if(location.protocol !== "https:" && location.hostname !== "localhost"){
+    alert("Phải dùng HTTPS để mở camera.");
+    return;
+}
+
+if(!scanner){
+    scanner = new Html5Qrcode("reader");
+}
+
+Html5Qrcode.getCameras()
+.then(devices => {
+
+    if(!devices.length){
+        alert("Không tìm thấy camera.");
         return;
     }
 
-    scanner = new Html5Qrcode("reader");
+    let cameraId;
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
-    Html5Qrcode.getCameras()
-    .then(devices => {
+    if(isMobile){
+        cameraId = { facingMode: "environment" }; // cam sau
+    } else {
+        cameraId = devices[0].id; // webcam laptop
+    }
 
-        if(!devices || devices.length === 0){
-            alert("Không tìm thấy camera.");
-            return;
+    scanner.start(
+        cameraId,
+        { fps: 10, qrbox: 250 },
+        qrMessage => {
+            document.getElementById("ketQua").textContent =
+                "Kết quả: " + qrMessage;
+            scanner.stop();
         }
+    );
 
-        let cameraId = devices[0].id;
-
-        // Ưu tiên camera sau
-        for(let device of devices){
-            let label = device.label.toLowerCase();
-            if(label.includes("back") || 
-               label.includes("rear") || 
-               label.includes("environment")){
-                cameraId = device.id;
-                break;
-            }
-        }
-
-        scanner.start(
-            cameraId,
-            {
-                fps: 10,
-                qrbox: 250,
-                aspectRatio: 1.0,
-                videoConstraints: {
-                    facingMode: { exact: "environment" }
-                }
-            },
-            qrMessage => {
-                document.getElementById("ketQua").innerHTML =
-                    "Kết quả: " + qrMessage;
-
-                // Tự động dừng sau khi quét xong
-                scanner.stop();
-            }
-        );
-
-    })
-    .catch(err => {
-        alert("Lỗi camera: " + err);
-    });
+})
+.catch(err => {
+    alert("Lỗi camera: " + err);
+});
 }
+
+/* ================= DỪNG CAMERA ================= */
 
 function dungCamera(){
-    if(scanner){
-        scanner.stop();
-    }
+if(scanner){
+    scanner.stop().catch(()=>{});
+}
 }
 
+/* ================= HIỂN ẢNH ================= */
+
+function hienAnh(){
+let fileInput = document.getElementById("chonAnh");
+let file = fileInput.files[0];
+
+if(!file) return;
+
+let reader = new FileReader();
+
+reader.onload = function(e){
+    document.getElementById("previewAnh").innerHTML =
+        "<img src='" + e.target.result + "' style='max-width:100%; border-radius:10px;'>";
+};
+
+reader.readAsDataURL(file);
+}
+
+/* ================= QUÉT TỪ ẢNH ================= */
+
 function scanAnh(){
+
     let fileInput = document.getElementById("chonAnh");
     let file = fileInput.files[0];
 
@@ -200,42 +212,32 @@ function scanAnh(){
         return;
     }
 
-    const reader = new Html5Qrcode("reader");
-
-    reader.scanFile(file, true)
-        .then(qrMessage => {
-            document.getElementById("ketQua").innerHTML =
-                "Kết quả: " + qrMessage;
-        })
-        .catch(err => {
-            document.getElementById("ketQua").innerHTML =
-                "Không nhận diện được mã QR.";
-        });
-}
-
-document.getElementById("noiDung").addEventListener("input", function(){
-
-    document.getElementById("traiTim").classList.add("hidden");
-
-    document.getElementById("qrcode").innerHTML = "";
-
-    document.getElementById("btnTai").classList.add("hidden");
-
-    document.getElementById("thongBao").innerHTML = "";
-
-    document.getElementById("ketQua").innerHTML = "";
-
-    document.getElementById("chonAnh").value = "";
-
-    if(scanner){
-        scanner.stop().then(() => {
-            document.getElementById("reader").innerHTML = "";
-        }).catch(() => {});
+    if(!scanner){
+        scanner = new Html5Qrcode("reader");
     }
 
-    document.getElementById("reader").innerHTML = "";
-});</script>
+    scanner.scanFile(file, true)
+    .then(qrMessage => {
 
+        document.getElementById("ketQua").textContent =
+            "Kết quả: " + qrMessage;
+
+        document.getElementById("previewAnh").innerHTML = "";
+        document.getElementById("reader").innerHTML = "";
+
+        // reset input file
+        document.getElementById("chonAnh").value = "";
+
+    })
+    .catch(() => {
+
+        document.getElementById("ketQua").textContent =
+            "Không nhận diện được mã QR.";
+
+        document.getElementById("reader").innerHTML = "";
+        document.getElementById("previewAnh").innerHTML = "";
+    });
+}
+</script>
 </body>
-
 </html>
