@@ -86,6 +86,7 @@ let scanner = null;
 /* ================= TẠO QR ================= */
 
 function taoQR(){
+
 let input = document.getElementById("noiDung").value.trim();
 let thongBao = document.getElementById("thongBao");
 let qrDiv = document.getElementById("qrcode");
@@ -96,12 +97,16 @@ if(input === ""){
     return;
 }
 
-qrDiv.innerHTML = "";
+/* xoá QR cũ thật sự */
+while(qrDiv.firstChild){
+    qrDiv.removeChild(qrDiv.firstChild);
+}
 
 QRCode.toCanvas(input,{width:200},function(err,canvas){
     if(err) return;
 
     qrDiv.appendChild(canvas);
+
     document.getElementById("btnTai").classList.remove("hidden");
     document.getElementById("traiTim").classList.remove("hidden");
 });
@@ -237,3 +242,4 @@ document.getElementById("previewAnh").innerHTML="";
 </script>
 </body>
 </html>
+
