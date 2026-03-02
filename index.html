@@ -131,13 +131,7 @@ function taiQR(){
     link.click();
 }
 function batCamera(){
-
-    if(location.protocol === "file:"){
-        alert("Không thể dùng camera khi mở file trực tiếp. Hãy dùng HTTPS.");
-        return;
-    }
-
-    scanner = new Html5Qrcode("reader");
+    if(isScanning) return;
 
     Html5Qrcode.getCameras()
     .then(devices => {
@@ -149,36 +143,43 @@ function batCamera(){
 
         let cameraId = devices[0].id;
 
-        // Ưu tiên camera sau
-        for(let device of devices){
-            let label = device.label.toLowerCase();
-            if(label.includes("back") || 
-               label.includes("rear") || 
-               label.includes("environment")){
-                cameraId = device.id;
-                break;
+        const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+        if(isMobile){
+            // Ưu tiên cam sau cho điện thoại
+            for(let device of devices){
+                let label = (device.label || "").toLowerCase();
+                if(label.includes("back") ||
+                   label.includes("rear") ||
+                   label.includes("environment")){
+                    cameraId = device.id;
+                    break;
+                }
+            }
+        }else{
+            //Laptop ưu tiên cam trước
+            for(let device of devices){
+                let label = (device.label || "").toLowerCase();
+                if(label.includes("front") ||
+                   label.includes("integrated")){
+                    cameraId = device.id;
+                    break;
+                }
             }
         }
 
-        scanner.start(
+        return scanner.start(
             cameraId,
-            {
-                fps: 10,
-                qrbox: 250,
-                aspectRatio: 1.0,
-                videoConstraints: {
-                    facingMode: { exact: "environment" }
-                }
-            },
+            { fps: 10, qrbox: 250 },
             qrMessage => {
-                document.getElementById("ketQua").innerHTML =
+                document.getElementById("ketQua").textContent =
                     "Kết quả: " + qrMessage;
-
-                // Tự động dừng sau khi quét xong
-                scanner.stop();
             }
         );
 
+    })
+    .then(() => {
+        isScanning = true;
     })
     .catch(err => {
         alert("Lỗi camera: " + err);
@@ -239,5 +240,6 @@ document.getElementById("noiDung").addEventListener("input", function(){
 </body>
 
 </html>
+
 
 
