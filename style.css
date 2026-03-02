@@ -150,7 +150,7 @@ button:hover{
         opacity:0;
     }
     15%{
-        opacity:0.08;
+        opacity:0.06;
     }
     40%{
         transform: translateY(-30vh) translateX(12px) scale(1);
@@ -186,6 +186,7 @@ button:hover{
     letter-spacing:1.5px;
 
 }
+
 
 
 
