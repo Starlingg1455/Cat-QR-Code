@@ -118,15 +118,25 @@ thongBao.style.color = "green";
 /* ================= TẢI QR ================= */
 
 function taiQR(){
-let canvas = document.querySelector("#qrcode canvas");
-if(!canvas){
-    alert("Chưa có mã QR.");
-    return;
-}
-let link = document.createElement("a");
-link.download = "cat-qr.png";
-link.href = canvas.toDataURL("image/png");
-link.click();
+    let canvas = document.querySelector("#qrcode canvas");
+    if(!canvas){
+        alert("Chưa có mã QR.");
+        return;
+    }
+
+    let link = document.createElement("a");
+    link.download = "cat-qr.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+
+    let thongBao = document.getElementById("thongBao");
+    thongBao.textContent = " Đã lưu mã QR thành công!";
+    thongBao.style.color = "green";
+
+    document.querySelector(".floating-cats").classList.add("active");
+    setTimeout(()=>{
+        document.querySelector(".floating-cats").classList.remove("active");
+    },2000);
 }
 
 /* ================= BẬT CAMERA ================= */
@@ -226,7 +236,7 @@ function scanAnh(){
     .then(qrMessage => {
 
     document.getElementById("thongBaoDoc").textContent =
-        "✅ Đọc mã QR thành công!";
+        " Đọc mã QR thành công!";
     document.getElementById("thongBaoDoc").style.color = "green";
 
     document.getElementById("ketQua").textContent =
@@ -248,4 +258,5 @@ function scanAnh(){
 </script>
 </body>
 </html>
+
 
