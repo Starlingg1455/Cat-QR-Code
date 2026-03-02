@@ -78,6 +78,8 @@ button:hover{
 }
 
 
+/* ================= MÈO TRÔI ================= */
+
 .floating-cats{
     position:fixed;
     top:0;
@@ -86,34 +88,36 @@ button:hover{
     height:100%;
     pointer-events:none;
     z-index:0;
-
-    opacity:1;
 }
 
+/* Mèo rõ lại như cũ */
 .floating-cats span{
     position:absolute;
-    font-size:35px;
-    opacity:0.12;
-    animation: floatUp 18s linear infinite;
+    font-size:38px;
+    opacity:0.18;   /* đậm lại như trước */
+
+    animation: floatUp linear infinite;
+
+    /* FIX MOBILE */
     transform:translateZ(0);
     backface-visibility:hidden;
     will-change:transform, opacity;
 }
 
-.floating-cats span:nth-child(odd){
-    left:10%;
-}
-.floating-cats span:nth-child(even){
-    left:80%;
-}
+/* Random vị trí ngang nhiều hơn */
+.floating-cats span:nth-child(4n+1){ left:5%;  animation-duration:18s; }
+.floating-cats span:nth-child(4n+2){ left:30%; animation-duration:22s; }
+.floating-cats span:nth-child(4n+3){ left:60%; animation-duration:20s; }
+.floating-cats span:nth-child(4n+4){ left:85%; animation-duration:24s; }
 
+/* Giữ animation cũ */
 @keyframes floatUp{
     0%{
-        transform:translateY(100vh);
+        transform:translateY(110vh);
         opacity:0;
     }
     10%{
-        opacity:0.15;
+        opacity:0.2;
     }
     100%{
         transform:translateY(-10vh);
@@ -121,14 +125,10 @@ button:hover{
     }
 }
 
+/* Mobile */
 @media(max-width:600px){
-    .card{
-        margin:20px;
-        padding:20px;
-    }
-
     .floating-cats span{
-        font-size:28px; 
-        animation-duration:14s; 
+        font-size:32px;
+        opacity:0.16;
     }
 }
