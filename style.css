@@ -175,3 +175,22 @@ button.gray:hover{
 
 }
 
+#reader{
+    width:100%;
+    min-height:300px;
+    margin-top:10px;
+    border-radius:12px;
+    overflow:hidden;
+}
+
+#reader video{
+    width:100% !important;
+    height:auto !important;
+}
+
+#ketQua{
+    font-size:32px;
+    font-weight:900;
+    color:#8B0000; /* đỏ đậm gần đen */
+    margin-top:10px;
+}
