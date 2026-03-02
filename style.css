@@ -149,14 +149,14 @@ button:hover{
         opacity:0;
     }
 }
-/* mobile tối ưu */
 @media(max-width:600px){
     .floating-cats span{
-        font-size:20px;
-        opacity:0.08;
-        animation-duration:18s;
+        font-size:18px;
+        animation-duration:28s;
+        opacity:0.06;
     }
 }
+
 
 
 
