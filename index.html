@@ -51,6 +51,7 @@
 <div id="previewAnh" style="margin-top:10px; text-align:center;"></div>
 <button class="gray" onclick="scanAnh()">Quét từ ảnh</button>
 
+<p id="thongBaoDoc" style="font-weight:bold; margin-top:10px;"></p>
 <p id="ketQua"></p>
 </div>
 
@@ -162,9 +163,14 @@ Html5Qrcode.getCameras()
         cameraId,
         { fps: 10, qrbox: 250 },
         qrMessage => {
-            document.getElementById("ketQua").textContent =
-                "Kết quả: " + qrMessage;
-            scanner.stop();
+            document.getElementById("thongBaoDoc").textContent =
+        "Đọc mã QR thành công!";
+        document.getElementById("thongBaoDoc").style.color = "green";
+
+        document.getElementById("ketQua").textContent =
+        "Kết quả: " + qrMessage;
+
+        scanner.stop();
         }
     );
 
@@ -219,21 +225,22 @@ function scanAnh(){
     scanner.scanFile(file, true)
     .then(qrMessage => {
 
-        document.getElementById("ketQua").textContent =
-            "Kết quả: " + qrMessage;
+    document.getElementById("thongBaoDoc").textContent =
+        "✅ Đọc mã QR thành công!";
+    document.getElementById("thongBaoDoc").style.color = "green";
 
-        document.getElementById("previewAnh").innerHTML = "";
-        document.getElementById("reader").innerHTML = "";
+    document.getElementById("ketQua").textContent =
+        "Kết quả: " + qrMessage;
 
-        // reset input file
-        document.getElementById("chonAnh").value = "";
-
-    })
+    document.getElementById("reader").innerHTML = "";
+    document.getElementById("previewAnh").innerHTML = "";
+    document.getElementById("chonAnh").value = "";
+})
     .catch(() => {
 
-        document.getElementById("ketQua").textContent =
-            "Không nhận diện được mã QR.";
-
+       document.getElementById("thongBaoDoc").textContent =
+    "❌ Không đọc được mã QR!";
+    document.getElementById("thongBaoDoc").style.color = "red";
         document.getElementById("reader").innerHTML = "";
         document.getElementById("previewAnh").innerHTML = "";
     });
@@ -241,3 +248,4 @@ function scanAnh(){
 </script>
 </body>
 </html>
+
