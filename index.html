@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="style.css">
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-<script src="https://unpkg.com/html5-qrcode"></script>
+<script src="https://unpkg.com/html5-qrcode" defer></script>
 </head>
 <body>
 
@@ -28,7 +28,6 @@
 	<button id="btnTai" class="gray hidden" onclick="taiQR()">Tải QR về</button>
         <p id="thongBao"></p>
 
-  <!-- Trái tim mèo -->
     <!-- Trái tim mèo -->
     <div id="traiTim" class="hidden">
   😽 😽 &nbsp;&nbsp;&nbsp;&nbsp;😽 😽<br>
@@ -184,9 +183,8 @@ function batCamera(){
 }
 
 function dungCamera(){
-    if(scanner){
-        scanner.stop();
-    }
+    if(scanner && scanner.isScanning){
+    scanner.stop();
 }
 
 function scanAnh(){
@@ -228,12 +226,12 @@ document.getElementById("noiDung").addEventListener("input", function(){
         }).catch(() => {});
     }
 
-    document.getElementById("reader").innerHTML = "";
 });</script>
 
 </body>
 
 </html>
+
 
 
 
