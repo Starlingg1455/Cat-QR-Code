@@ -19,7 +19,7 @@
 <div class="section">
 <h3>Sinh mã QR</h3>
 
-<input type="text" id="noiDung" placeholder="Nhập nội dung...">
+<input type="text" id="noiDung" placeholder="Nhập nội dung..." oninput="xoaQR()">
 <button onclick="taoQR()">Tạo mã QR</button>
 
 <div class="qr-box">
@@ -44,6 +44,7 @@
 <h3>Quét mã QR</h3>
 
 <button onclick="batCamera()">Bật camera</button>
+<button onclick="doiCamera()">Đổi camera</button>
 <button class="gray" onclick="dungCamera()">Dừng camera</button>
 
 <div id="reader"></div>
@@ -82,6 +83,16 @@
 <script>
 
 let scanner = null;
+let cameras = [];
+let currentCamera = 0;
+
+/* ================= XOA QR CU ================= */
+
+function xoaQR(){
+document.getElementById("qrcode").innerHTML="";
+document.getElementById("btnTai").classList.add("hidden");
+document.getElementById("traiTim").classList.add("hidden");
+}
 
 /* ================= TẠO QR ================= */
 
@@ -98,14 +109,11 @@ if(input === ""){
     return;
 }
 
-/* xoá QR cũ */
 qrDiv.innerHTML = "";
 
-/* tạo canvas mới */
 let canvas = document.createElement("canvas");
 qrDiv.appendChild(canvas);
 
-/* vẽ QR vào canvas đó */
 QRCode.toCanvas(canvas, input, { width: 200 }, function (err) {
     if (err) return;
 
@@ -116,6 +124,7 @@ QRCode.toCanvas(canvas, input, { width: 200 }, function (err) {
 thongBao.innerHTML = "Tạo mã QR thành công.";
 thongBao.style.color = "green";
 }
+
 function taiQR(){
 let canvas=document.querySelector("#qrcode canvas");
 if(!canvas){
@@ -153,13 +162,10 @@ if(!devices.length){
     return;
 }
 
-let cameraId;
-const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-cameraId=isMobile?{facingMode:"environment"}:devices[0].id;
+cameras = devices;
 
 scanner.start(
-cameraId,
+cameras[currentCamera].id,
 {fps:10,qrbox:250},
 qrMessage=>{
 
@@ -174,6 +180,38 @@ scanner.stop();
 
 }).catch(err=>{
 alert("Lỗi camera: "+err);
+});
+}
+
+/* ================= DOI CAMERA ================= */
+
+function doiCamera(){
+
+if(!scanner || cameras.length < 2){
+alert("Không có camera khác.");
+return;
+}
+
+scanner.stop().then(()=>{
+
+currentCamera++;
+
+if(currentCamera >= cameras.length){
+currentCamera = 0;
+}
+
+scanner.start(
+cameras[currentCamera].id,
+{fps:10,qrbox:250},
+qrMessage=>{
+
+document.getElementById("thongBaoDoc").textContent="Đọc mã QR thành công!";
+document.getElementById("ketQua").textContent="Kết quả: "+qrMessage;
+
+scanner.stop();
+}
+);
+
 });
 }
 
@@ -241,5 +279,3 @@ document.getElementById("previewAnh").innerHTML="";
 </script>
 </body>
 </html>
-
-
